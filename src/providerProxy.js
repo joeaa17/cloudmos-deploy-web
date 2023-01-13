@@ -142,7 +142,7 @@ spawnProxy();
 let pendingRequests = [];
 let openSockets = [];
 
-exports.openWebSocket = function (url, certPem, keyPem, onMessage) {
+const openWebSocket = function (url, certPem, keyPem, onMessage) {
   const requestId = nanoid();
 
   // console.log("openWebSocket: ", child);
@@ -204,7 +204,7 @@ async function makeRequest(url, method, body, certPem, keyPem) {
   });
 }
 
-exports.queryProvider = async function (url, method, body, certPem, prvPem) {
+const queryProvider = async function (url, method, body, certPem, prvPem) {
   // console.log("Querying provider using proxy");
 
   try {
@@ -231,3 +231,6 @@ function getProxyFilePath() {
       return "";
   }
 }
+
+
+export default { queryProvider, openWebSocket };
