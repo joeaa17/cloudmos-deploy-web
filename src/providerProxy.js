@@ -142,59 +142,7 @@ spawnProxy();
 let pendingRequests = [];
 let openSockets = [];
 
-async function makeRequest(url, method, body, certPem, keyPem) {
-  const requestId = nanoid();
-
-  return new Promise((res, rej) => {
-    pendingRequests[requestId] = {
-      res: res,
-      rej: rej
-    };
-
-    child.send({
-      id: requestId,
-      type: "fetch",
-      url: url,
-      method: method,
-      body: body,
-      certPem: certPem,
-      keyPem: keyPem
-    });
-  });
-}
-
-
-function getProxyFilePath() {
-  switch (process.platform) {
-    case "win32":
-      return "./tools/cloudmos-provider-proxy.exe";
-    case "linux":
-      return "./tools/cloudmos-provider-proxy-lin";
-    case "darwin":
-      return "./tools/cloudmos-provider-proxy";
-    default:
-      console.log("Unsupported platform: " + process.platform);
-      return "";
-  }
-}
-
-const obj = {
-
-queryProvider: async function (url, method, body, certPem, prvPem) {
-  // console.log("Querying provider using proxy");
-
-  try {
-    const response = await makeRequest(url, method, body, certPem, prvPem);
-
-    return response;
-  } catch (err) {
-    console.error(err);
-    // console.log("Failed to query provider with proxy");
-    throw err;
-  }
-},
-
-openWebSocket: function (url, certPem, keyPem, onMessage) {
+const openWebSocket = function (url, certPem, keyPem, onMessage) {
   const requestId = nanoid();
 
   // console.log("openWebSocket: ", child);
@@ -233,8 +181,53 @@ openWebSocket: function (url, certPem, keyPem, onMessage) {
       });
     }
   };
-}
-
 };
 
-export default obj;
+async function makeRequest(url, method, body, certPem, keyPem) {
+  const requestId = nanoid();
+
+  return new Promise((res, rej) => {
+    pendingRequests[requestId] = {
+      res: res,
+      rej: rej
+    };
+
+    child.send({
+      id: requestId,
+      type: "fetch",
+      url: url,
+      method: method,
+      body: body,
+      certPem: certPem,
+      keyPem: keyPem
+    });
+  });
+}
+
+const queryProvider = async function (url, method, body, certPem, prvPem) {
+  // console.log("Querying provider using proxy");
+
+  try {
+    const response = await makeRequest(url, method, body, certPem, prvPem);
+
+    return response;
+  } catch (err) {
+    console.error(err);
+    // console.log("Failed to query provider with proxy");
+    throw err;
+  }
+};
+
+function getProxyFilePath() {
+  switch (process.platform) {
+    case "win32":
+      return "./tools/cloudmos-provider-proxy.exe";
+    case "linux":
+      return "./tools/cloudmos-provider-proxy-lin";
+    case "darwin":
+      return "./tools/cloudmos-provider-proxy";
+    default:
+      console.log("Unsupported platform: " + process.platform);
+      return "";
+  }
+}
