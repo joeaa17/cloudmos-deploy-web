@@ -163,12 +163,12 @@ const spawn = (_command, _parameters, _options) => {
 let child = null;
 function spawnProxy() {
 
-  const dir = __dirname.replace("asar", "asar.unpacked");
-  const command = path.join(dir, getProxyFilePath());
+  // const dir = __dirname.replace("asar", "asar.unpacked");
+  // const command = path.join(dir, getProxyFilePath());
 
   const parameters = [];
 
-  child = spawn(command, parameters, {
+  child = spawn("" /*command*/, parameters, {
     env: {},
     stdio: ["pipe", "pipe", "pipe", "ipc"]
   });
