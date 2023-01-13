@@ -65,13 +65,15 @@ const { executeKdf } = require("@cosmjs/proto-signing");
 
 
 
-const providerProxy = require("./providerProxy");
+// const providerProxy = 
+require("./providerProxy");
+
 const path = require("path");
 const fs = require("browserify-fs");
 const helpers = require("./helpers");
 
 const appVersion = "1.0.0";//window.process.argv[window.process.argv.length - 2];
-const appEnvironment = "development";//window.process.argv[window.process.argv.length - 1];
+const appEnvironment = "production";//window.process.argv[window.process.argv.length - 1];
 
 // whitelist channels
 const validChannels = ["update_available", "update_downloaded", "download_update", "restart_app", "show_notification", "check_update", "relaunch"];
@@ -100,8 +102,8 @@ let downloadWorker;
 
 // contextBridge.exposeInMainWorld("electron", {
 window.electron = {
-  queryProvider: (url, method, body, certPem, prvPem) => providerProxy.queryProvider(url, method, body, certPem, prvPem),
-  openWebSocket: (url, certPem, prvPem, onMessage) => providerProxy.openWebSocket(url, certPem, prvPem, onMessage),
+  queryProvider: (url, method, body, certPem, prvPem) => queryProvider(url, method, body, certPem, prvPem),
+  openWebSocket: (url, certPem, prvPem, onMessage) => openWebSocket(url, certPem, prvPem, onMessage),
   openUrl: (url) => {
     // console.log("Opening in browser: " + url);
     // shell.openExternal(url);
