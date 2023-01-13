@@ -1,0 +1,113 @@
+{
+  "name": "akashlytics-deploy",
+  "version": "0.17.2",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxmaxlabs/cloudmos-deploy.git"
+  },
+  "description": "Cloudmos Deploy",
+  "author": {
+    "name": "MaxMax Labs Inc.",
+    "email": "admin@akashlytics.com",
+    "url": "https://cloudmos.io/"
+  },
+  "main": "public/electron.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "cross-env BROWSER=none react-app-rewired start --scripts-version react-scripts",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "electron-dev": "cross-env ELECTRON_START_URL=http://localhost:3000 electron .",
+    "build-win": "cross-env GENERATE_SOURCEMAP=false react-app-rewired build && electron-builder --windows",
+    "build-mac": "cross-env GENERATE_SOURCEMAP=false react-app-rewired build && electron-builder --mac",
+    "build-linux": "cross-env GENERATE_SOURCEMAP=false react-app-rewired build && electron-builder --linux",
+    "dist-mac": "cross-env DEBUG=electron-builder electron-builder --mac",
+    "release": "react-app-rewired build && electron-builder --windows --publish always",
+    "build": "cross-env GENERATE_SOURCEMAP=false BROWSER=none react-app-rewired build --scripts-version react-scripts"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "pluginOptions": {
+    "electronBuilder": {
+      "nodeIntegration": true
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@cosmjs/proto-signing": "^0.28.13",
+    "@cosmjs/stargate": "^0.28.4",
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.58",
+    "@nivo/core": "^0.79.0",
+    "@nivo/pie": "^0.79.1",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@typescript-eslint/parser": "^5.48.1",
+    "axios": "^0.21.1",
+    "browserify-fs": "^1.0.0",
+    "clsx": "^1.1.1",
+    "cluster": "^0.7.7",
+    "cosmjs-types": "^0.4.1",
+    "cross-env": "^7.0.3",
+    "date-fns": "^2.22.1",
+    "electron": "^12.0.7",
+    "electron-builder": "^22.10.5",
+    "electron-google-analytics": "^1.0.2",
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^4.4.4",
+    "electron-notarize": "^1.1.1",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^4.3.9",
+    "json-stable-stringify": "^1.0.1",
+    "jsrsasign": "^10.2.0",
+    "lodash": "^4.17.21",
+    "monaco-editor-webpack-plugin": "^4.1.2",
+    "nanoid": "^3.1.23",
+    "node-fetch": "^2.6.1",
+    "notistack": "^1.0.9",
+    "react": "^17.0.2",
+    "react-app-rewired": "^2.1.8",
+    "react-dom": "^17.0.2",
+    "react-error-boundary": "^3.1.3",
+    "react-github-btn": "^1.2.2",
+    "react-helmet-async": "^1.0.9",
+    "react-hook-form": "^7.8.4",
+    "react-intl": "^5.24.3",
+    "react-markdown": "^8.0.0",
+    "react-monaco-editor": "^0.45.0",
+    "react-qr-code": "^2.0.3",
+    "react-query": "^3.17.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "remark-gfm": "^3.0.1",
+    "semver": "^7.3.5",
+    "spawn-npm": "^1.4.7",
+    "spawn-please": "^2.0.1",
+    "superchild": "^0.1.10",
+    "typescript": "^4.9.4",
+    "use-state-with-callback": "^2.0.3",
+    "usehooks-ts": "^2.2.1",
+    "web-vitals": "^1.1.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {}
+}

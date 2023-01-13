@@ -1,0 +1,7 @@
+[
+   {
+      "id":"edgenet.bhs.aksh.pw",
+      "api":"http://api.edgenet.bhs.aksh.pw:1317",
+      "rpc":"http://rpc.edgenet.bhs.aksh.pw:26657"
+   }
+]
