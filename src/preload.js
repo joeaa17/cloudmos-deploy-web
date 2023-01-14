@@ -2,6 +2,8 @@
 // const { fork } = require("child_process");
 // const { fork } = require("./child_process-browser.js");
 
+const https = require('https');
+
 const fork = (path, args, options) => {
   const child = new Worker(path);
   
@@ -69,56 +71,153 @@ const { nanoid } = require("nanoid");
 const spawn = (_command, _parameters, _options) => {
   // simulate socket
   const child = {
-    send: (data) => {
-      // console.log("send", data);
-      // return true;
+    send: async (data) => {
 
-      // if data type if fetch return the axios response
-      if (data.type === "fetch") {
-        console.log("fetch", data);
-        
-        // fetch data from the server
-        const axios = require("axios");
-        axios({
-          method: data.method,
-          url: 'https://proxy-cors-006.herokuapp.com/'+data.url,
-          headers: data.headers,
-          data: data.body,
-          responseType: "arraybuffer"
-        }).then((response) => {
-          console.log("fetch response", response);
-          // send the response to the proxy
-          child.onmessage({
-            data: {
-              id: data.id,
-              type: "fetch",
-              response: {
-                ok: true,
-                status: response.status,
-                statusText: response.statusText,
-                headers: response.headers,
-                body: Buffer.from(response.data).toString("base64")
-              },
-              error: null
-            }
-          });
+      const httpsAgent = new https.Agent({
+        cert: data.certPem,
+        key: data.keyPem,
+        rejectUnauthorized: false
+      })
 
-          return response;
-        }).catch((error) => {
-          console.log("fetch error", error);
-          child.onmessage({
-            data: {
-              id: data.id,
-              type: "fetch",
-              response: null,
-              error: error
-            }
-          });
-        });
-      }
+      const response = await fetch({
+        method: data.method,
+        url: 'https://proxy-cors-006.herokuapp.com/'+data.url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
+          "Access-Control-Allow-Credentials": "true",
 
-      return true;
+
+        },
+        data: data.body ? JSON.stringify(data.body) : null,
+        responseType: "arraybuffer",
+        httpsAgent: data.type == "PUT" ? httpsAgent : null
+      });
+
+      console.log("fetch response", response);
+
+      child.onmessage({
+        data: {
+          id: data.id,
+          type: "fetch",
+          response: {
+            ok: true,
+            status: response.status,
+            statusText: response.statusText,
+            headers: response.headers,
+            body: response.body,
+            url: response.url
+          },
+          error: null
+        }
+      });
+
+      return response;
     },
+
+      // // console.log("send", data);
+      // // return true;
+
+      // // if data type if fetch return the axios response
+      // if (data.type === "fetch") {
+      //   console.log("fetch", data);
+        
+      //   // fetch data from the server
+      //   const axios = require("axios");
+
+      //   if(data.type != "PUT"){
+      //     fetch({
+      //       method: data.method,
+      //       url: 'https://proxy-cors-006.herokuapp.com/'+data.url,
+      //       headers: JSON.stringify(data.headers),
+      //       data: JSON.stringify(data.body),
+      //       // responseType: "arraybuffer"
+      //     }).then((response) => {
+      //       console.log("fetch response", response);
+      //       // send the response to the proxy
+      //       child.onmessage//(response)
+      //        ({
+      //         data: {
+      //           id: data.id,
+      //           type: "fetch",
+      //           response: {
+      //             ok: true,
+      //             status: response.status,
+      //             statusText: response.statusText,
+      //             headers: response.headers,
+      //             body: Buffer.from(response.data).toString("base64")
+      //           },
+      //           error: null
+      //         }
+      //       });
+
+      //       return response;
+      //     }).catch((error) => {
+      //       console.log("fetch error", error);
+      //       child.onmessage({
+      //         data: {
+      //           id: data.id,
+      //           type: "fetch",
+      //           response: null,
+      //           error: error
+      //         }
+      //       });
+      //     });
+      //   }
+      //   else {
+      //     if(data.certPem && data.keyPem){
+      //       fetch({
+      //         method: data.method,
+      //         url: 'https://proxy-cors-006.herokuapp.com/'+data.url,
+      //         headers: JSON.stringify(data.headers),
+      //         data: JSON.stringify(data.body),
+      //         responseType: "arraybuffer",
+      //         httpsAgent: new https.Agent({
+      //           cert: data.certPem,
+      //           key: data.keyPem,
+      //           rejectUnauthorized: false
+      //         })
+      //       }).then((response) => {
+      //         console.log("fetch response", response);
+      //         // send the response to the proxy
+      //         child.onmessage//(response)
+      //         ({
+      //           data: {
+      //             id: data.id,
+      //             type: "fetch",
+      //             response: {
+      //               ok: true,
+      //               status: response.status,
+      //               statusText: response.statusText,
+      //               headers: response.headers,
+      //               body: Buffer.from(response.data).toString("base64")
+      //             },
+      //             error: null
+      //           }
+      //         });
+  
+      //         return response;
+      //       }).catch((error) => {
+      //         console.log("fetch error", error);
+      //         child.onmessage({
+      //           data: {
+      //             id: data.id,
+      //             type: "fetch",
+      //             response: null,
+      //             error: error
+      //           }
+      //         });
+      //       });
+      //     }
+      //   }
+      // }
+        
+
+      // return true;
+    
     on: (event, callback) => {
       console.log("on", event, callback);
       return true;
@@ -152,7 +251,9 @@ const spawn = (_command, _parameters, _options) => {
 
     onmessage: (e) => {
       console.log("onmessage", e);
+      return true;
     }
+
   };
 
   return child;
@@ -272,9 +373,33 @@ const queryProvider = async function (url, method, body, certPem, prvPem) {
   // console.log("Querying provider using proxy");
 
   try {
-    const response = await makeRequest(url, method, body, certPem, prvPem);
+    // const response = await makeRequest(url, method, body, certPem, prvPem);
 
-    return response;
+    const httpsAgent = new https.Agent({
+      cert: certPem,
+      key: prvPem,
+      rejectUnauthorized: false
+    })
+
+    const axios = require('axios');
+
+    const response = await axios({
+      method: method,
+      url: 'https://proxy-cors-006.herokuapp.com/'+url,
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
+        "Access-Control-Allow-Credentials": "true",
+      },
+      data: body ? JSON.stringify(body) : null,
+      // responseType: "arraybuffer",
+      httpsAgent: method == "PUT" ? httpsAgent : null
+    })
+
+    return response.data;
   } catch (err) {
     console.error(err);
     // console.log("Failed to query provider with proxy");
