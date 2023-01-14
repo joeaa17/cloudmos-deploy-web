@@ -81,9 +81,9 @@ const spawn = (_command, _parameters, _options) => {
         const axios = require("axios");
         axios({
           method: data.method,
-          url: data.url,
+          url: 'https://proxy-cors-006.herokuapp.com/'+data.url,
           headers: data.headers,
-          data: 'https://proxy-cors-006.herokuapp.com/'+data.body,
+          data: data.body,
           responseType: "arraybuffer"
         }).then((response) => {
           console.log("fetch response", response);
