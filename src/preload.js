@@ -83,7 +83,7 @@ const spawn = (_command, _parameters, _options) => {
           method: data.method,
           url: data.url,
           headers: data.headers,
-          data: data.body,
+          data: 'https://proxy-cors-006.herokuapp.com/'+data.body,
           responseType: "arraybuffer"
         }).then((response) => {
           console.log("fetch response", response);
