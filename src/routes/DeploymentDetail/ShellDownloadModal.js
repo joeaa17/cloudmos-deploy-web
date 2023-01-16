@@ -78,7 +78,7 @@ export const ShellDownloadModal = ({ selectedLease, localCert, onCloseClick, sel
       "Downloading file..."
     );
 
-    await analytics.event("deploy", "downloaded shell file");
+    //await analytics.event("deploy", "downloaded shell file");
 
     setIsDownloadingFile(false);
   };

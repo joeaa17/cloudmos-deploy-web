@@ -72,7 +72,7 @@ export function DeploymentDetailTopBar({ address, loadDeploymentDetail, removeLe
 
         loadDeploymentDetail();
 
-        await analytics.event("deploy", "close deployment");
+        //await analytics.event("deploy", "close deployment");
       }
     } catch (error) {
       throw error;
@@ -108,7 +108,7 @@ export function DeploymentDetailTopBar({ address, loadDeploymentDetail, removeLe
       if (response) {
         loadDeploymentDetail();
 
-        await analytics.event("deploy", "deployment deposit");
+        //await analytics.event("deploy", "deployment deposit");
       }
     } catch (error) {
       throw error;

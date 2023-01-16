@@ -120,7 +120,7 @@ export function DeploymentDetail({ deployments }) {
   const onChangeTab = async (ev, value) => {
     setActiveTab(value);
 
-    await analytics.event("deploy", `navigate tab ${value}`);
+    //await analytics.event("deploy", `navigate tab ${value}`);
   };
 
   return (

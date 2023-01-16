@@ -1,6 +1,9 @@
 import { roundDecimal } from "./math";
 
 export function providerStatusToDto(providerStatus, providerVersion) {
+
+  console.log("providerStatusToDto", providerStatus, providerVersion);
+
   return {
     name: providerStatus.cluster_public_hostname,
     orderCount: providerStatus.bidengine.orders,

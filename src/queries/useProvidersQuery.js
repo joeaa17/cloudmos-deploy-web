@@ -9,7 +9,7 @@ import { cloudmosApi } from "../shared/constants";
 async function getProviderDetail(apiEndpoint, owner) {
   if (!owner) return {};
 
-  const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.providerDetail(apiEndpoint, owner));
+  const response = await axios.get(process.env.REACT_APP_proxy+ApiUrlService.providerDetail(apiEndpoint, owner));
 
   return response.data;
 }
@@ -37,7 +37,7 @@ export function useProviders(options) {
 }
 
 async function getDataNodeProviders() {
-  const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+`${cloudmosApi}/providers`);
+  const response = await axios.get(process.env.REACT_APP_proxy+`${cloudmosApi}/providers`);
 
   return response.data;
 }
@@ -72,7 +72,7 @@ export function useProviderStatus(providerUri, options) {
 }
 
 async function getNetworkCapacity() {
-  const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.networkCapacity());
+  const response = await axios.get(process.env.REACT_APP_proxy+ApiUrlService.networkCapacity());
   return getNetworkCapacityDto(response.data);
 }
 
@@ -81,7 +81,7 @@ export function useNetworkCapacity(options) {
 }
 
 async function getAuditors() {
-  const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+"https://raw.githubusercontent.com/maxmaxlabs/cloudmos-deploy/master/auditors.json");
+  const response = await axios.get(process.env.REACT_APP_proxy+"https://raw.githubusercontent.com/maxmaxlabs/cloudmos-deploy/master/auditors.json");
 
   return response.data;
 }

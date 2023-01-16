@@ -8,7 +8,7 @@ async function getBidList(apiEndpoint, address, dseq) {
   if (!address) throw new Error("address must be defined.");
   if (!dseq) throw new Error("dseq must be defined.");
 
-  const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.bidList(apiEndpoint, address, dseq));
+  const response = await axios.get(process.env.REACT_APP_proxy+ApiUrlService.bidList(apiEndpoint, address, dseq));
 
   return response.data.bids.map((b) => ({
     id: b.bid.bid_id.provider + b.bid.bid_id.dseq + b.bid.bid_id.gseq + b.bid.bid_id.oseq,

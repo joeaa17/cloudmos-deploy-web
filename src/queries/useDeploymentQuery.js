@@ -23,7 +23,7 @@ export function useDeploymentList(address, options) {
 async function getDeploymentDetail(apiEndpoint, address, dseq) {
   if (!address) return {};
 
-  const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.deploymentDetail(apiEndpoint, address, dseq));
+  const response = await axios.get(process.env.REACT_APP_proxy+ApiUrlService.deploymentDetail(apiEndpoint, address, dseq));
 
   return deploymentToDto(response.data);
 }

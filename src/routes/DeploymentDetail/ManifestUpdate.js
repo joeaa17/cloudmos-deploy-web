@@ -167,7 +167,7 @@ export function ManifestUpdate({ deployment, leases, closeManifestEditor }) {
           await sendManifest(providerInfo, mani);
         }
 
-        await analytics.event("deploy", "update deployment");
+        //await analytics.event("deploy", "update deployment");
 
         setIsSendingManifest(false);
 

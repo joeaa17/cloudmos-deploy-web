@@ -240,7 +240,7 @@ export function DeploymentLogs({ leases, selectedLogsMode, setSelectedLogsMode }
       "Downloading logs..."
     );
 
-    await analytics.event("deploy", "downloaded logs");
+    //await analytics.event("deploy", "downloaded logs");
 
     setIsDownloadingLogs(false);
   };

@@ -145,7 +145,7 @@ export function DeploymentDepositModal({ handleCancel, onDeploymentDeposit, min 
         return;
       }
 
-      await analytics.event("deploy", "use depositor");
+      //await analytics.event("deploy", "use depositor");
     } else if (deposit > balance) {
       setError(`You can't deposit more than you currently have in your balance. Current balance is: ${uaktToAKT(balance)}AKT.`);
       return;

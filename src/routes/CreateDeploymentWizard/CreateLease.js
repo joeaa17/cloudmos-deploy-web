@@ -185,7 +185,7 @@ export function CreateLease({ dseq }) {
 
       if (!response) throw new Error("Rejected transaction");
 
-      await analytics.event("deploy", "create lease");
+      //await analytics.event("deploy", "create lease");
     } catch (error) {
       // Rejected transaction
       return;
@@ -220,7 +220,7 @@ export function CreateLease({ dseq }) {
 
     setIsSendingManifest(false);
 
-    await analytics.event("deploy", "send manifest");
+    //await analytics.event("deploy", "send manifest");
 
     history.replace(UrlService.deploymentDetails(dseq, "LOGS", "events"));
   }

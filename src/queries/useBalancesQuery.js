@@ -8,10 +8,10 @@ import { useSettings } from "../context/SettingsProvider";
 async function getBalances(apiEndpoint, address) {
   if (!address) return {};
 
-  const balancePromise = axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.balance(apiEndpoint, address));
-  const rewardsPromise = axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.rewards(apiEndpoint, address));
-  const redelegationsPromise = axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.redelegations(apiEndpoint, address));
-  const unbondingsPromise = axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.unbonding(apiEndpoint, address));
+  const balancePromise = axios.get(process.env.REACT_APP_proxy+ApiUrlService.balance(apiEndpoint, address));
+  const rewardsPromise = axios.get(process.env.REACT_APP_proxy+ApiUrlService.rewards(apiEndpoint, address));
+  const redelegationsPromise = axios.get(process.env.REACT_APP_proxy+ApiUrlService.redelegations(apiEndpoint, address));
+  const unbondingsPromise = axios.get(process.env.REACT_APP_proxy+ApiUrlService.unbonding(apiEndpoint, address));
 
   const [balanceResponse, rewardsResponse, redelegationsResponse, unbondingsResponse] = await Promise.all([
     balancePromise,
@@ -46,7 +46,7 @@ async function getBalances(apiEndpoint, address) {
   let delegations = 0;
   // Delegations endpoint throws an error if there are no delegations
   try {
-    const delegationsResponse = await axios.get('https://proxy-cors-006.herokuapp.com/'+ApiUrlService.delegations(apiEndpoint, address));
+    const delegationsResponse = await axios.get(process.env.REACT_APP_proxy+ApiUrlService.delegations(apiEndpoint, address));
     const delegationsData = delegationsResponse.data;
 
     delegations = delegationsData.delegation_responses.some((b) => b.balance.denom === "uakt")

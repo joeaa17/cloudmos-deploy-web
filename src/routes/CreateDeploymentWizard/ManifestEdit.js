@@ -147,7 +147,7 @@ export function ManifestEdit(props) {
 
         history.replace("/createDeployment/acceptBids/" + dd.deploymentId.dseq);
 
-        await analytics.event("deploy", "create deployment");
+        //await analytics.event("deploy", "create deployment");
       } else {
         setIsCreatingDeployment(false);
       }

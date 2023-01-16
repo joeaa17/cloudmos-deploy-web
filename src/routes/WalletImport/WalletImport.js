@@ -94,7 +94,7 @@ export function WalletImport() {
       // Load local certificates
       loadLocalCert(password);
 
-      await analytics.event("deploy", "import wallet");
+      //await analytics.event("deploy", "import wallet");
 
       history.replace(UrlService.dashboard());
     } catch (error) {

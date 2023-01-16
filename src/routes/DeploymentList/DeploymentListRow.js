@@ -145,7 +145,7 @@ export function DeploymentListRow({ deployment, isSelectable, onSelectDeployment
       if (response) {
         refreshDeployments();
 
-        await analytics.event("deploy", "deployment deposit");
+        //await analytics.event("deploy", "deployment deposit");
       }
     } catch (error) {
       throw error;
@@ -163,7 +163,7 @@ export function DeploymentListRow({ deployment, isSelectable, onSelectDeployment
       if (response) {
         refreshDeployments();
 
-        await analytics.event("deploy", "close deployment");
+        //await analytics.event("deploy", "close deployment");
       }
     } catch (error) {
       throw error;

@@ -189,7 +189,7 @@ export function NewWallet() {
         // Load local certificates
         loadLocalCert(password);
 
-        await analytics.event("deploy", "create wallet");
+        //await analytics.event("deploy", "create wallet");
 
         history.replace(UrlService.dashboard());
       } else {

@@ -119,7 +119,7 @@ export function WalletOpen() {
       // Load local certificates
       loadLocalCert(password);
 
-      await analytics.event("deploy", "open wallet");
+      //await analytics.event("deploy", "open wallet");
 
       history.push(UrlService.dashboard());
     } catch (err) {

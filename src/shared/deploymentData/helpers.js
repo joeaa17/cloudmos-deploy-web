@@ -99,7 +99,7 @@ export function ParseServiceProtocol(input) {
 }
 
 export async function getCurrentHeight(apiEndpoint) {
-  const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+`${apiEndpoint}/blocks/latest`);
+  const response = await axios.get(process.env.REACT_APP_proxy+`${apiEndpoint}/blocks/latest`);
   const data = response.data;
 
   const height = parseInt(data.block.header.height);
