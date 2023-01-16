@@ -73,7 +73,7 @@ export const GrantModal = ({ address, onClose }) => {
     const response = await sendTransaction([message]);
 
     if (response) {
-      await analytics.event("deploy", "authorize spend");
+      //await analytics.event("deploy", "authorize spend");
 
       onClose();
     }

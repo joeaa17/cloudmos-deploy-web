@@ -27,7 +27,7 @@ export const WalletProvider = ({ children }) => {
       setIsRefreshingBalance(true);
 
       try {
-        const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+`${apiEndpoint}/cosmos/bank/v1beta1/balances/${address}`);
+        const response = await axios.get(process.env.REACT_APP_proxy+`${apiEndpoint}/cosmos/bank/v1beta1/balances/${address}`);
         const data = response.data;
         const balance = data.balances.length > 0 && data.balances.some((b) => b.denom === "uakt") ? data.balances.find((b) => b.denom === "uakt").amount : 0;
 

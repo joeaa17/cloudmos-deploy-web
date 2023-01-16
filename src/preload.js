@@ -1,8 +1,7 @@
-// const { ipcRenderer, shell, contextBridge } = require("electron");
-// const { fork } = require("child_process");
-// const { fork } = require("./child_process-browser.js");
-
+require('dotenv').config();
 const https = require('https');
+const { executeKdf } = require("@cosmjs/proto-signing");
+const { nanoid } = require("nanoid");
 
 const fork = (path, args, options) => {
   const child = new Worker(path);
@@ -63,10 +62,6 @@ const fork = (path, args, options) => {
   return child;
 }
 
-const { executeKdf } = require("@cosmjs/proto-signing");
-
-
-const { nanoid } = require("nanoid");
 
 const spawn = (_command, _parameters, _options) => {
   // simulate socket
@@ -81,7 +76,7 @@ const spawn = (_command, _parameters, _options) => {
 
       const response = await fetch({
         method: data.method,
-        url: 'https://proxy-cors-006.herokuapp.com/'+data.url,
+        url: process.env.REACT_APP_proxy+data.url,
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
@@ -89,8 +84,6 @@ const spawn = (_command, _parameters, _options) => {
           "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
           "Access-Control-Allow-Credentials": "true",
-
-
         },
         data: data.body ? JSON.stringify(data.body) : null,
         responseType: "arraybuffer",
@@ -99,125 +92,10 @@ const spawn = (_command, _parameters, _options) => {
 
       console.log("fetch response", response);
 
-      child.onmessage({
-        data: {
-          id: data.id,
-          type: "fetch",
-          response: {
-            ok: true,
-            status: response.status,
-            statusText: response.statusText,
-            headers: response.headers,
-            body: response.body,
-            url: response.url
-          },
-          error: null
-        }
-      });
+      // child.onmessage(response);
 
       return response;
     },
-
-      // // console.log("send", data);
-      // // return true;
-
-      // // if data type if fetch return the axios response
-      // if (data.type === "fetch") {
-      //   console.log("fetch", data);
-        
-      //   // fetch data from the server
-      //   const axios = require("axios");
-
-      //   if(data.type != "PUT"){
-      //     fetch({
-      //       method: data.method,
-      //       url: 'https://proxy-cors-006.herokuapp.com/'+data.url,
-      //       headers: JSON.stringify(data.headers),
-      //       data: JSON.stringify(data.body),
-      //       // responseType: "arraybuffer"
-      //     }).then((response) => {
-      //       console.log("fetch response", response);
-      //       // send the response to the proxy
-      //       child.onmessage//(response)
-      //        ({
-      //         data: {
-      //           id: data.id,
-      //           type: "fetch",
-      //           response: {
-      //             ok: true,
-      //             status: response.status,
-      //             statusText: response.statusText,
-      //             headers: response.headers,
-      //             body: Buffer.from(response.data).toString("base64")
-      //           },
-      //           error: null
-      //         }
-      //       });
-
-      //       return response;
-      //     }).catch((error) => {
-      //       console.log("fetch error", error);
-      //       child.onmessage({
-      //         data: {
-      //           id: data.id,
-      //           type: "fetch",
-      //           response: null,
-      //           error: error
-      //         }
-      //       });
-      //     });
-      //   }
-      //   else {
-      //     if(data.certPem && data.keyPem){
-      //       fetch({
-      //         method: data.method,
-      //         url: 'https://proxy-cors-006.herokuapp.com/'+data.url,
-      //         headers: JSON.stringify(data.headers),
-      //         data: JSON.stringify(data.body),
-      //         responseType: "arraybuffer",
-      //         httpsAgent: new https.Agent({
-      //           cert: data.certPem,
-      //           key: data.keyPem,
-      //           rejectUnauthorized: false
-      //         })
-      //       }).then((response) => {
-      //         console.log("fetch response", response);
-      //         // send the response to the proxy
-      //         child.onmessage//(response)
-      //         ({
-      //           data: {
-      //             id: data.id,
-      //             type: "fetch",
-      //             response: {
-      //               ok: true,
-      //               status: response.status,
-      //               statusText: response.statusText,
-      //               headers: response.headers,
-      //               body: Buffer.from(response.data).toString("base64")
-      //             },
-      //             error: null
-      //           }
-      //         });
-  
-      //         return response;
-      //       }).catch((error) => {
-      //         console.log("fetch error", error);
-      //         child.onmessage({
-      //           data: {
-      //             id: data.id,
-      //             type: "fetch",
-      //             response: null,
-      //             error: error
-      //           }
-      //         });
-      //       });
-      //     }
-      //   }
-      // }
-        
-
-      // return true;
-    
     on: (event, callback) => {
       console.log("on", event, callback);
       return true;
@@ -251,7 +129,7 @@ const spawn = (_command, _parameters, _options) => {
 
     onmessage: (e) => {
       console.log("onmessage", e);
-      return true;
+      return e.data;
     }
 
   };
@@ -263,9 +141,6 @@ const spawn = (_command, _parameters, _options) => {
 
 let child = null;
 function spawnProxy() {
-
-  // const dir = __dirname.replace("asar", "asar.unpacked");
-  // const command = path.join(dir, getProxyFilePath());
 
   const parameters = [];
 
@@ -310,8 +185,6 @@ let openSockets = [];
 const openWebSocket = function (url, certPem, keyPem, onMessage) {
   const requestId = nanoid();
 
-  // console.log("openWebSocket: ", child);
-
   openSockets[requestId] = {
     onMessage: onMessage
   };
@@ -323,8 +196,6 @@ const openWebSocket = function (url, certPem, keyPem, onMessage) {
     certPem: certPem,
     keyPem: keyPem
   });
-
-  // console.log("Sending websocket request: " + url);
 
   return {
     close: () => {
@@ -357,7 +228,7 @@ async function makeRequest(url, method, body, certPem, keyPem) {
       rej: rej
     };
 
-    child.send({
+    return child.send({
       id: requestId,
       type: "fetch",
       url: url,
@@ -371,36 +242,22 @@ async function makeRequest(url, method, body, certPem, keyPem) {
 
 const queryProvider = async function (url, method, body, certPem, prvPem) {
   // console.log("Querying provider using proxy");
-
+  
+  const axios = require('axios');
   try {
-    // const response = await makeRequest(url, method, body, certPem, prvPem);
+    let response = null;
 
-    const httpsAgent = new https.Agent({
-      cert: certPem,
-      key: prvPem,
-      rejectUnauthorized: false
-    })
-
-    const axios = require('axios');
-
-    const response = await axios({
-      method: method,
-      url: 'https://proxy-cors-006.herokuapp.com/'+url,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
-        "Access-Control-Allow-Credentials": "true",
-      },
-      data: body ? JSON.stringify(body) : null,
-      // responseType: "arraybuffer",
-      httpsAgent: method == "PUT" ? httpsAgent : null
-    })
-
-    return response.data;
-  } catch (err) {
+    response = await axios({
+        url: process.env.REACT_APP_proxy+url,
+        method: method,
+        data: body,
+        headers: {
+          'x-cert': certPem ? Buffer.from(certPem).toString("base64") : '',
+          'x-key': prvPem ? Buffer.from(prvPem).toString("base64") : '',
+        },
+      });
+      return response.data;
+    } catch (err) {
     console.error(err);
     // console.log("Failed to query provider with proxy");
     throw err;

@@ -134,7 +134,7 @@ export function TransactionModal({ isOpen, onConfirmTransaction, messages, onClo
 
       showTransactionSnackbar("Transaction succeeds!", "", transactionHash, "success");
 
-      await analytics.event("deploy", "successful transaction");
+      //await analytics.event("deploy", "successful transaction");
 
       refreshBalance();
 
@@ -146,7 +146,7 @@ export function TransactionModal({ isOpen, onConfirmTransaction, messages, onClo
       const transactionHash = err.txHash;
       let errorMsg = "An error has occured";
 
-      await analytics.event("deploy", "failed transaction");
+      //await analytics.event("deploy", "failed transaction");
 
       if (err.message.includes("was submitted but was not yet found on the chain")) {
         errorMsg = "Transaction timeout";

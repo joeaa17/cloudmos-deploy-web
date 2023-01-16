@@ -52,7 +52,7 @@ export function ChangeAccountNameModal(props) {
 
       enqueueSnackbar(<Snackbar title="Success!" iconVariant="success" />, { variant: "success", autoHideDuration: 1000 });
 
-      await analytics.event("deploy", "change account name");
+      //await analytics.event("deploy", "change account name");
 
       props.onClose();
     } catch (err) {

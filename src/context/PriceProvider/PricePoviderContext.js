@@ -17,7 +17,7 @@ export const PriceProvider = ({ children }) => {
 
       // console.log("Fetching latest market data from " + endpointUrl);
 
-      const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+endpointUrl);
+      const response = await axios.get(process.env.REACT_APP_proxy+endpointUrl);
       const data = response.data;
 
       const aktMarketData = {

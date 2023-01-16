@@ -20,7 +20,7 @@ export function ExportCertificate(props) {
 
   useEffect(() => {
     async function init() {
-      await analytics.event("deploy", "export certificate");
+      //await analytics.event("deploy", "export certificate");
     }
 
     init();

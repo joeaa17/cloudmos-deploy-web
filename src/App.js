@@ -31,14 +31,14 @@ function App() {
   useEffect(() => {
     const init = async () => {
       const shouldLog = isLegitPath(window.location.pathname);
-      shouldLog && (await analytics.pageview(HOSTNAME, window.location.pathname + window.location.search, document.title));
+      // shouldLog && (await analytics.pageview(HOSTNAME, window.location.pathname + window.location.search, document.title));
     };
 
     history.listen(async (location, action) => {
       try {
         setTimeout(async () => {
           const shouldLog = isLegitPath(location.pathname);
-          shouldLog && (await analytics.pageview(HOSTNAME, location.pathname + location.search, document.title));
+          // shouldLog && (await analytics.pageview(HOSTNAME, location.pathname + location.search, document.title));
         }, 100);
       } catch (error) {
         console.log(error);

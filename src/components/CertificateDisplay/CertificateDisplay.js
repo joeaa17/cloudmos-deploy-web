@@ -74,7 +74,7 @@ export function CertificateDisplay() {
           setSelectedCertificate(null);
         }
 
-        await analytics.event("deploy", "revoke certificate");
+        //await analytics.event("deploy", "revoke certificate");
       }
     } catch (error) {
       throw error;
@@ -112,7 +112,7 @@ export function CertificateDisplay() {
 
         setSelectedCertificate(currentCert);
 
-        await analytics.event("deploy", "create certificate");
+        //await analytics.event("deploy", "create certificate");
       }
     } catch (error) {
       throw error;
@@ -151,7 +151,7 @@ export function CertificateDisplay() {
 
         setSelectedCertificate(currentCert);
 
-        await analytics.event("deploy", "regenerate certificate");
+        //await analytics.event("deploy", "regenerate certificate");
       }
     } catch (error) {
       throw error;
