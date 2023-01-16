@@ -39,7 +39,7 @@ export const initiateNetworkData = async () => {
     networks.map(async (network) => {
       let version = null;
       try {
-        const response = await axios.get('https://proxy-cors-006.herokuapp.com/'+network.versionUrl, { timeout: 10000 });
+        const response = await axios.get(process.env.REACT_APP_proxy+network.versionUrl, { timeout: 10000 });
         version = response.data;
       } catch (error) {
         console.log(error);
